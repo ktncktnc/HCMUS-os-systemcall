@@ -11,7 +11,7 @@ asmlinkage long sys_pidtoname(int pid, char* buf, int len){
 
     printk("Pidtoname: input from user: %d\n", pid);
     //Wrong pid, return -1
-    if(pid < 0) return -1;
+    if(pid < 1) return -1;
 
     //find pid
     pid_struct = find_get_pid(pid);
@@ -22,17 +22,13 @@ asmlinkage long sys_pidtoname(int pid, char* buf, int len){
     //if no task found, return -1
     if(task == NULL) return -1;
     
+    if(strlen(task->comm) > len - 1) return strlen(task->comm);
+
     //write to buf with size = len 01
-    long written_len = copy_to_user(buf, task->comm, len - 1);
+    long written_len = copy_to_user(buf, task->comm, len);
 
-
-    //If error, return -1
     if(written_len == 0) return 0;
 
-    //Success
-    if(written_len > 0) return (long)(len - 1 + written_len);
-
-    
     else return -1;
     
 }
