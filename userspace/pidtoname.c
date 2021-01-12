@@ -8,8 +8,8 @@ int main(){
     int pid;
     char name[64];
     puts("Enter pid to find: ");
-    scanf("%d",pid);
-    long status = syscall(378, pid, name, 64);
+    scanf("%d", &pid);
+    long status = syscall(378, pid, name, 4);
     printf("Syscall pnametoid returned: name = %s with status code = %ld\n", name, status);
     return 0;
 }
